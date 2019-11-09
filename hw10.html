@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Assignment 10 - API Fun</title>
+
+        <style type="text/css">
+        body {
+            font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        }
+        h1 {
+            text-align:center;
+        }
+        input {
+            margin:10px auto;
+            padding: 5px;
+        }
+        a {
+            color: #2b29bb;
+            text-decoration:none;
+        }
+        a:hover {
+            color:#2b29bb;
+            text-decoration: underline;
+        }
+        </style>
+        
+    </head>
+
+    <body>
+        <h1>Using a Holiday API</h1>
+        <input type="button" onclick="getHolidays()" value="display holidays">
+        <div id="holidayList"></div>
+        <div id="assignmentInfo">
+            <h2>API description</h2>
+            <p>This API allows you to get information about holidays, namely, holidays from countries all over the world, 
+                their date in any given year, and the observances of the holidays. <br>
+                I found the API on a <a href="https://www.diycode.cc/projects/toddmotto/public-apis">list of public API's</a> 
+                and read about its documentation and retrieved a key from the <a href="https://holidayapi.com/">API's site</a>. <br>
+                For the request, the options I used were 1. my access key, 2. a year ("2018"), and 3. a country ("US"). <br>
+                One use for this API could be in scheduling calendars, since holidays must be taken into account
+                when identifying days off. Because the database contains holidays from many countries, comparisons could be made 
+                between countries and their respective holidays.
+            </p>
+        </div>
+
+        <script language="javascript">
+                function getHolidays() {
+                    baseURL = "https://holidayapi.com/v1/holidays";
+                    baseURL2 = "https://holidayapi.com/v1/countries";
+                    key = "b7490899-dbb3-4e4b-8e06-53cd2633773c";
+                    country = "US";
+                    year = "2018";
+                    url = baseURL + "?key=" + key + "&year=" + year + "&country=" + country;
+                    request = new XMLHttpRequest();
+                    request.open("GET", url, true);
+                    request.onreadystatechange = function() { 
+                        if(request.readyState <= 4 && request.status == 200) {
+                            result = request.responseText;
+                            data = JSON.parse(result);
+                            holidaysArr = data.holidays;
+                            for(i = 0; i < 10; i++) {
+                                document.getElementById("holidayList").innerHTML += (holidaysArr[i].name + " - "+ holidaysArr[i].date + "<br>");
+                            }
+                        }
+                        else {
+                            alert("something isn't working");
+                            //alert("readyState: " +  request.readyState + ", status: " + request.status);
+                        } 
+                    }
+                    request.send();
+                }
+    
+            </script>
+    </body>
+</html>
